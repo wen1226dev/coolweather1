@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.coolweather1.android.gson.Forecast;
 import com.coolweather1.android.gson.Weather;
+import com.coolweather1.android.service.AutoUpdateService;
 import com.coolweather1.android.util.HttpUtil;
 import com.coolweather1.android.util.Utility;
 
@@ -111,9 +112,6 @@ public class WeatherActivity extends AppCompatActivity {
             loadBingPic();
         }
     }
-
-
-
     /**
      * 根据天气id请求城市天气信息。
      */
@@ -132,16 +130,13 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather", responseText);
                             editor.apply();
                             mWeatherId = weather.basic.weatherId;
-
                             showWeatherInfo(weather);
                         } else {
                             Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
-
                     }
                 });
-
             }
 
             @Override
@@ -218,6 +213,9 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
 
     }
 
